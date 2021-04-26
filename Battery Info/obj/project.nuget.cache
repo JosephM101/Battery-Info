@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "HBfXHEWnS1TymoVnb8kKOtdQ3vxOqbFsTmJI1SqvkQXOBpP93BU0DBS4/8+uDoiwDjH1THTUHy566qdbivdCjQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\jmig2\\source\\repos\\Battery Info\\Battery Info\\Battery Info.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jmig2\\.nuget\\packages\\microsoft.netcore.platforms\\3.0.0\\microsoft.netcore.platforms.3.0.0.nupkg.sha512",
+    "C:\\Users\\jmig2\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.19041.1\\microsoft.windows.sdk.contracts.10.0.19041.1.nupkg.sha512",
+    "C:\\Users\\jmig2\\.nuget\\packages\\system.runtime.windowsruntime\\4.6.0\\system.runtime.windowsruntime.4.6.0.nupkg.sha512",
+    "C:\\Users\\jmig2\\.nuget\\packages\\system.runtime.windowsruntime.ui.xaml\\4.6.0\\system.runtime.windowsruntime.ui.xaml.4.6.0.nupkg.sha512"
+  ],
+  "logs": []
+}
