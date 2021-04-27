@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Power;
 using Windows.System.Power;
@@ -18,6 +19,21 @@ namespace Battery_Info
         public Form1()
         {
             InitializeComponent();
+            refreshToolStripMenuItem.Click += RefreshToolStripMenuItem_Click;
+            saveFileToolStripMenuItem.Click += SaveFileToolStripMenuItem_Click;
+            exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
+            toolStripMenuItem2.Click += ToolStripMenuItem2_Click;
+            RefreshTreeView();
+        }
+
+        private void ToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            new AboutBox1().ShowDialog();
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         async void RefreshTreeView()
@@ -34,19 +50,19 @@ namespace Battery_Info
                     var report = battery.GetReport();
                     int batteryCharge = (int)Math.Round(((decimal)report.RemainingCapacityInMilliwattHours / (decimal)report.FullChargeCapacityInMilliwattHours) * 100, 0);
                     int healthPercentage = (int)Math.Round((decimal)report.FullChargeCapacityInMilliwattHours / (decimal)report.DesignCapacityInMilliwattHours * 100, 0);
-                    treeView1.Nodes.Add("Battery " + index.ToString() + " (" + batteryCharge + "%)");
-                    treeView1.Nodes[index].Nodes.Add("Device ID: " + device.Id);
-                    treeView1.Nodes[index].Nodes.Add("Status: " + StatusToString(report.Status));
+                    treeView1.Nodes.Add("Battery" + index.ToString(), "Battery " + index.ToString() + " (" + batteryCharge + "%)");
+                    treeView1.Nodes[index].Nodes.Add("DeviceID", "Device ID: " + device.Id);
+                    treeView1.Nodes[index].Nodes.Add("BatteryStatus", "Status: " + StatusToString(report.Status));
                     if (report.Status == BatteryStatus.Charging)
                     {
-                        treeView1.Nodes[index].Nodes.Add("Charge rate: " + report.ChargeRateInMilliwatts.ToString() + " mW");
+                        treeView1.Nodes[index].Nodes.Add("ChrgRate", "Charge rate: " + report.ChargeRateInMilliwatts.ToString() + " mW");
                     }
                     else if (report.Status == BatteryStatus.Discharging)
                     {
-                        treeView1.Nodes[index].Nodes.Add("Discharge rate: " + Math.Abs((decimal)report.ChargeRateInMilliwatts).ToString() + " mW");
+                        treeView1.Nodes[index].Nodes.Add("ChrgRate", "Discharge rate: " + Math.Abs((decimal)report.ChargeRateInMilliwatts).ToString() + " mW");
                     }
-                    treeView1.Nodes[index].Nodes.Add("Design capacity: " + report.DesignCapacityInMilliwattHours.ToString() + " mWh");
-                    treeView1.Nodes[index].Nodes.Add("Full charge capacity: " + report.FullChargeCapacityInMilliwattHours.ToString() + " mWh");
+                    treeView1.Nodes[index].Nodes.Add("DesignCapacity", "Design capacity: " + report.DesignCapacityInMilliwattHours.ToString() + " mWh");
+                    treeView1.Nodes[index].Nodes.Add("ChargeCapacity", "Full charge capacity: " + report.FullChargeCapacityInMilliwattHours.ToString() + " mWh");
                     string batteryHealthSuffix = "";
                     if (healthPercentage > 80)
                     {
@@ -66,20 +82,33 @@ namespace Battery_Info
                     }
                     if (healthPercentage <= 45)
                     {
-                        batteryHealthSuffix = "Battery health is nearing dangerous levels. Replace battery.";
+                        batteryHealthSuffix = "It's not recommended that you continue using this battery.";
                     }
                     if (healthPercentage <= 30)
                     {
                         batteryHealthSuffix = "Battery is bad. Replace now.";
                     }
-                    treeView1.Nodes[index].Nodes.Add("Remaining capacity: " + report.RemainingCapacityInMilliwattHours.ToString() + " mWh (" + batteryCharge + "%)");
-                    treeView1.Nodes[index].Nodes.Add("Battery health: " + healthPercentage.ToString() + "% (" + batteryHealthSuffix + ")");
+                    treeView1.Nodes[index].Nodes.Add("RemainingCapacity", "Remaining capacity: " + report.RemainingCapacityInMilliwattHours.ToString() + " mWh (" + batteryCharge + "%)");
+                    treeView1.Nodes[index].Nodes.Add("BatHealth", "Battery health: " + healthPercentage.ToString() + "% (" + batteryHealthSuffix + ")");
                     index++;
                 }
                 catch { /* Add error handling, as applicable */ }
             }
             treeView1.ExpandAll();
             treeView1.EndUpdate();
+        }
+
+        private void SaveNodes(TreeNodeCollection nodesCollection, XmlWriter textWriter)
+        {
+            foreach (var node in nodesCollection.OfType<TreeNode>().Where(x => x.Nodes.Count == 0))
+                textWriter.WriteAttributeString(node.Name, node.Text);
+
+            foreach (var node in nodesCollection.OfType<TreeNode>().Where(x => x.Nodes.Count > 0))
+            {
+                textWriter.WriteStartElement(node.Name);
+                SaveNodes(node.Nodes, textWriter);
+                textWriter.WriteEndElement();
+            }
         }
 
         string StatusToString(BatteryStatus batteryStatus)
@@ -103,16 +132,35 @@ namespace Battery_Info
             }
         }
 
-        private void RefreshToolStripMenuItem1_Click(object sender, System.EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (autoRefreshToolStripMenuItem.Checked == true)
+            {
+                RefreshTreeView();
+            }
+        }
+
+        private void RefreshToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             RefreshTreeView();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void SaveFileToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            if(autoRefreshToolStripMenuItem.Checked == true)
+            SaveToFile();
+        }
+
+        void SaveToFile()
+        {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                RefreshTreeView();
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.WriteEndDocumentOnClose = true;
+                settings.Indent = true;
+                settings.NewLineOnAttributes = true;
+                XmlWriter xmlWriter = XmlWriter.Create(saveFileDialog1.FileName, settings);
+                SaveNodes(treeView1.Nodes, xmlWriter);
+                xmlWriter.Close();
             }
         }
     }

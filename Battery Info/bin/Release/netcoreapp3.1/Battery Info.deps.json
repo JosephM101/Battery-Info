@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "Battery Info/1.0.1": {
+      "Battery Info/1.0.0": {
         "dependencies": {
           "Microsoft.Windows.SDK.Contracts": "10.0.19041.1"
         },
@@ -35,7 +35,7 @@
     }
   },
   "libraries": {
-    "Battery Info/1.0.1": {
+    "Battery Info/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
