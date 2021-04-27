@@ -3,4 +3,5 @@ Battery Info/.vs/Battery Info/v16/.suo
 *.sqlite
 *.cache
 *.cache
-Battery Info/obj/project.nuget.cache
+Battery Info/obj/*
+Battery Info/obj
