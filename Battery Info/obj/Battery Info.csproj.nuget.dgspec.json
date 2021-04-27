@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jmig2\\source\\repos\\Battery Info\\Battery Info\\Battery Info.csproj": {}
+    "C:\\Users\\jmig2\\Documents\\GitHub\\Battery-Info\\Battery Info\\Battery Info.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jmig2\\source\\repos\\Battery Info\\Battery Info\\Battery Info.csproj": {
+    "C:\\Users\\jmig2\\Documents\\GitHub\\Battery-Info\\Battery Info\\Battery Info.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jmig2\\source\\repos\\Battery Info\\Battery Info\\Battery Info.csproj",
+        "projectUniqueName": "C:\\Users\\jmig2\\Documents\\GitHub\\Battery-Info\\Battery Info\\Battery Info.csproj",
         "projectName": "Battery Info",
-        "projectPath": "C:\\Users\\jmig2\\source\\repos\\Battery Info\\Battery Info\\Battery Info.csproj",
+        "projectPath": "C:\\Users\\jmig2\\Documents\\GitHub\\Battery-Info\\Battery Info\\Battery Info.csproj",
         "packagesPath": "C:\\Users\\jmig2\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jmig2\\source\\repos\\Battery Info\\Battery Info\\obj\\",
+        "outputPath": "C:\\Users\\jmig2\\Documents\\GitHub\\Battery-Info\\Battery Info\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jmig2\\AppData\\Roaming\\NuGet\\NuGet.Config",
